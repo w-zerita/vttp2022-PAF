@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GiphyService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">giphy</a> &gt; <a href="index.source.html" class="el_package">vttp2022.paf.giphy.services</a> &gt; <span class="el_source">GiphyService.java</span></div><h1>GiphyService.java</h1><pre class="source lang-java linenums">package vttp2022.paf.giphy.services;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+
+
+@Service
+<span class="fc" id="L22">public class GiphyService {</span>
+
+    // GIPHY_API_KEY
+    // export GIPHY_API_KEY=&quot;&lt;apiKey&gt;&quot;
+    @Value(&quot;${giphy.api.key}&quot;)
+    private String giphyKey;
+
+    private static final String BASE_URL = &quot;https://api.giphy.com/v1/gifs/search&quot;;
+    private static final String OFFSET = &quot;0&quot;;
+    private static final String LANG = &quot;en&quot;;
+
+    public List&lt;String&gt; getGiphy(String q) {
+<span class="nc" id="L34">        return getGiphy(q, 10, &quot;pg&quot;);</span>
+    }
+
+    public List&lt;String&gt; getGiphy(String q, Integer limit) {
+<span class="nc" id="L38">        return getGiphy(q, limit, &quot;pg&quot;);</span>
+    }
+
+    public List&lt;String&gt; getGiphy(String q, Integer limit, String rating) {
+
+<span class="fc" id="L43">        List&lt;String&gt; result = new ArrayList&lt;&gt;();</span>
+        
+<span class="fc" id="L45">        String url = UriComponentsBuilder</span>
+<span class="fc" id="L46">            .fromUriString(BASE_URL)</span>
+<span class="fc" id="L47">            .queryParam(&quot;api_key&quot;, giphyKey)</span>
+<span class="fc" id="L48">            .queryParam(&quot;q&quot;, q)</span>
+<span class="fc" id="L49">            .queryParam(&quot;limit&quot;, limit)</span>
+<span class="fc" id="L50">            .queryParam(&quot;offset&quot;, OFFSET) // optional</span>
+<span class="fc" id="L51">            .queryParam(&quot;rating&quot;, rating)</span>
+<span class="fc" id="L52">            .queryParam(&quot;lang&quot;, LANG)</span>
+<span class="fc" id="L53">            .toUriString();</span>
+
+<span class="fc" id="L55">        RequestEntity&lt;Void&gt; req = RequestEntity</span>
+<span class="fc" id="L56">            .get(url)</span>
+<span class="fc" id="L57">            .accept(MediaType.APPLICATION_JSON)</span>
+<span class="fc" id="L58">            .build();</span>
+
+<span class="fc" id="L60">        RestTemplate template = new RestTemplate();</span>
+<span class="fc" id="L61">        ResponseEntity&lt;String&gt; resp = null;</span>
+        try {
+<span class="fc" id="L63">            resp = template.exchange(req, String.class);</span>
+            // System.out.printf(&quot;&gt;&gt;&gt; resp: %s&quot;, resp);
+<span class="nc" id="L65">        } catch (Exception e) {</span>
+<span class="nc" id="L66">            e.printStackTrace();</span>
+<span class="nc" id="L67">            return result;</span>
+<span class="fc" id="L68">        }</span>
+
+        // image fixed-width url
+        // JSONPath: $.data.*.images.fixed_width.url
+<span class="fc" id="L72">		JsonReader r = Json.createReader(new StringReader(resp.getBody()));</span>
+<span class="fc" id="L73">        JsonObject o = r.readObject();</span>
+<span class="fc" id="L74">        JsonArray data = o.getJsonArray(&quot;data&quot;);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (int i = 0; i &lt; data.size(); i++) {</span>
+<span class="fc" id="L76">            JsonObject gif = data.getJsonObject(i);</span>
+<span class="fc" id="L77">            String image = gif</span>
+<span class="fc" id="L78">                .getJsonObject(&quot;images&quot;)</span>
+<span class="fc" id="L79">                .getJsonObject(&quot;fixed_width&quot;)</span>
+<span class="fc" id="L80">                .getString(&quot;url&quot;);</span>
+<span class="fc" id="L81">            result.add(image);</span>
+        }
+<span class="fc" id="L83">        System.out.printf(&quot;&gt;&gt;&gt; Image URLs: %s&quot;, result);</span>
+<span class="fc" id="L84">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
