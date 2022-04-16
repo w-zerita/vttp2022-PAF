@@ -44,17 +44,15 @@ public class BffController {
             bSvc.addNewContact(c);
             mav.addObject("message", 
                 "%s has been added to your BFF list".formatted(c.getName()));
-            mav.addObject("c", c);
-            mav.addObject("contacts", bSvc.getAllContacts());
         } catch (BffException e) {
-            mav.addObject("c", c);
-            mav.addObject("contacts", bSvc.getAllContacts());
             mav.addObject("message", 
                 "Error: %s".formatted(e.getReason()));
             mav.setStatus(HttpStatus.BAD_REQUEST);
             e.printStackTrace();
         }
-
+        
+        mav.addObject("c", c);
+        mav.addObject("contacts", bSvc.getAllContacts());
         mav.setViewName("index");
         return mav;
     }
