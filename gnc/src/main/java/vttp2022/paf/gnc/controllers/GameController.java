@@ -14,7 +14,8 @@ import vttp2022.paf.gnc.models.Game;
 import vttp2022.paf.gnc.services.GameService;
 
 @Controller
-@RequestMapping(path="/game", produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+@RequestMapping(path="/game", 
+    produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 public class GameController {
 
     @Autowired
@@ -32,5 +33,4 @@ public class GameController {
         model.addAttribute("comment", game.getComments());
         return "game";
     }
-    
 }

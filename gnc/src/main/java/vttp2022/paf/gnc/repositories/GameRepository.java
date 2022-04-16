@@ -8,14 +8,12 @@ import org.springframework.stereotype.Repository;
 import vttp2022.paf.gnc.models.Comment;
 import vttp2022.paf.gnc.models.Game;
 
-import static vttp2022.paf.gnc.repositories.Queries.*;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class GameRepository {
+public class GameRepository implements Queries {
 
     @Autowired
     private JdbcTemplate template;
@@ -28,7 +26,8 @@ public class GameRepository {
         return getCommentsByGid(gid, limit, 0);
     }
 
-    public List<Comment> getCommentsByGid(Integer gid, Integer limit, Integer offset) {
+    public List<Comment> getCommentsByGid(
+        Integer gid, Integer limit, Integer offset) {
 
         final List<Comment> result = new LinkedList<>();
 
@@ -57,5 +56,4 @@ public class GameRepository {
 
         return Optional.of(Game.create(result));
     }
-    
 }

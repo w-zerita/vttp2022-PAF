@@ -61,5 +61,4 @@ public class GameServiceTest {
         Optional<Game> opt = gameSvc.getComments(gid);
         assertFalse(opt.isPresent(), "should not find gid: %d".formatted(gid));
     }
-    
 }

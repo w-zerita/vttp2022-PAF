@@ -25,5 +25,4 @@ public class GameService {
         g.setComments(gameRepo.getCommentsByGid(gid));
         return Optional.of(g);
     }
-    
 }

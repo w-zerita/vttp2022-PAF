@@ -27,7 +27,9 @@ public class GameRestController {
     private GameService gameSvc;
     
     @GetMapping(path="/{gid}")
-    public ResponseEntity<String> getGameAndCommentsById(@PathVariable Integer gid) {
+    public ResponseEntity<String> getGameAndCommentsById(
+        @PathVariable Integer gid) {
+            
         Optional<Game> opt = gameSvc.getComments(gid);
         JsonObjectBuilder objBuilder = Json.createObjectBuilder();
         if (opt.isEmpty())
