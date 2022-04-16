@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class Bff {
+public class Contact {
 
     private String email;
     private String name;
@@ -57,10 +57,10 @@ public class Bff {
                 + phone + ", status=" + status + "]";
     }
     
-    public Bff() {
+    public Contact() {
     }
 
-    public Bff(String email, String name, String phone, Date dob, String status, String passphrase) {
+    public Contact(String email, String name, String phone, Date dob, String status, String passphrase) {
         this.email = email;
         this.name = name;
         this.phone = phone;

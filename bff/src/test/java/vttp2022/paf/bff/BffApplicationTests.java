@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import vttp2022.paf.bff.models.Bff;
+import vttp2022.paf.bff.models.Contact;
 import vttp2022.paf.bff.repositories.BffRepository;
 import vttp2022.paf.bff.services.BffException;
 import vttp2022.paf.bff.services.BffService;
@@ -24,7 +24,7 @@ class BffAppApplicationTests {
 	@Autowired
 	private BffRepository bRepo;
 
-	private Bff barney;
+	private Contact barney;
 
 	public BffAppApplicationTests() {
 
@@ -32,24 +32,24 @@ class BffAppApplicationTests {
 		cal.set(1995, 3, 26);
 		
 		// email, name, phone, dob, status, passphrase
-		barney = new Bff("barney@gmail.com", "barney", 
+		barney = new Contact("barney@gmail.com", "barney", 
 			"12345678", cal.getTime(), "friend", "hibarney");
 	}
 
 	@BeforeEach
 	public void setup() {
-		bRepo.insertBff(barney);
+		bRepo.insertContact(barney);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		bRepo.deletBffByEmail(barney.getEmail());
+		bRepo.deleteContactByEmail(barney.getEmail());
 	}
 
 	@Test
 	void insertBarneyShouldFail() {
 		try {
-			bSvc.addNewBff(barney);
+			bSvc.addNewContact(barney);
 		} catch (BffException e) {
 			assertTrue(true);
 			return;

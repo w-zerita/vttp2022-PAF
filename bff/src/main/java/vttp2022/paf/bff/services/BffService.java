@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vttp2022.paf.bff.models.Bff;
+import vttp2022.paf.bff.models.Contact;
 import vttp2022.paf.bff.repositories.BffRepository;
 
 @Service
@@ -15,17 +15,17 @@ public class BffService {
     @Autowired
     private BffRepository bRepo;
     
-    public void addNewBff(Bff bff) throws BffException {
+    public void addNewContact(Contact c) throws BffException {
         
-        Optional<Bff> opt = bRepo.findBffByEmail(bff.getEmail());
+        Optional<Contact> opt = bRepo.findContactByEmail(c.getEmail());
         if (opt.isPresent())
-            throw new BffException("%s is already in your BFF list!".formatted(bff.getName()));
+            throw new BffException("%s is already in your BFF list!".formatted(c.getName()));
         
-        if (!bRepo.insertBff(bff))
-            throw new BffException("Cannot add %s to BFF list".formatted(bff.getEmail()));
+        if (!bRepo.insertContact(c))
+            throw new BffException("Cannot add %s to BFF list".formatted(c.getEmail()));
     }
 
-    public List<Bff> getAllBffs() {
-        return bRepo.selectAllBff();
+    public List<Contact> getAllContacts() {
+        return bRepo.selectAllContacts();
     }
 }
