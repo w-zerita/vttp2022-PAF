@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+</head>
+<body th:object="${post}">
+    <h2>Uploader: <span th:text="*{uploader}"></span></h2>
+    <div>
+        <img th:src="@{/upload/{postId}/image(postId=*{postId})}" alt="">
+    </div>
+</body>
+</html>
